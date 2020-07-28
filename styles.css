@@ -1,0 +1,64 @@
+body {
+    background-color: rgb(248, 248, 248);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+main {
+    text-align: center;
+}
+
+textarea {
+    resize: none;
+}
+
+#calendar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 2em 0;
+}
+
+.calendar-day {
+    padding: 1em 2em;
+    margin: 0.2em;
+    background-color: rgb(225, 23, 30);
+    opacity: 0.1;
+    color: #fff;
+    transition: opacity 100ms;
+}
+
+.active {
+    opacity: 1 !important;
+}
+
+#download {
+    font-size: .8rem;
+}
+
+#download a {
+    background-color: rgb(136, 169, 30);
+    color: #fff;
+    border-radius: 5px;
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: 200ms;
+    text-decoration: none;
+    opacity: 0.1;
+}
+
+#download a:hover {
+    background-color: rgb(125, 156, 24);
+}
+
+@media only screen and (max-width: 960px) {
+    #calendar {
+        font-size: .85em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .calendar-day {
+        min-width: 220px;
+    }
+}

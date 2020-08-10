@@ -32,8 +32,17 @@ textarea {
     opacity: 1 !important;
 }
 
+#options {
+    font-size: .8rem;
+}
+
+#options div {
+    padding: .5em;
+}
+
 #download {
     font-size: .8rem;
+    padding: 1rem;
 }
 
 #download a {

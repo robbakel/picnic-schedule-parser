@@ -11,6 +11,8 @@ Zo 02-8:  Dag 7:00 - 16:00
 const textArea = document.querySelector('textarea');
 const button = document.querySelector('button');
 const calendarButton = document.querySelector('#download a');
+const locationCheckbox = document.querySelector('input[type="checkbox"]#location');
+const customEventName = document.querySelector('input[type="text"]#event-name');
 
 let scheduleArray = [];
 let workDays = [];
@@ -91,6 +93,16 @@ function downloadICS(filename, text) {
 }
 
 calendarButton.addEventListener('click', () => { 
+
+    //OPTIONS
+    if(locationCheckbox.checked == true) {
+        icsContent = icsContent.replace(/\n(END:VEVENT)/g, "\nLOCATION:Picnic\\, Achtseweg Noord 30-36\\, 5651 GG Eindhoven\\, Netherlands\nEND:VEVENT");
+    }
+
+    if(customEventName.value !== "") {
+        icsContent = icsContent.replace(/(SUMMARY:Picnic)/g, "SUMMARY:" + customEventName.value);
+    }
+
     downloadICS("picnic.ics",icsContent);
 });
 

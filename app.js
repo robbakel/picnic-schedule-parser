@@ -1,72 +1,63 @@
-/* -----------------------
-       SAMPLE DATA
-
-Di 28-7:  Dag 7:00 - 16:00
-Vr 31-7:  Dag 7:00 - 17:00
-Za 01-8:  Dag 7:00 - 16:00
-Zo 02-8:  Dag 7:00 - 16:00
-
------------------------ */
-
+// Define variables
 const textArea = document.querySelector('textarea');
 const button = document.querySelector('button');
 const calendarButton = document.querySelector('#download a');
 const locationCheckbox = document.querySelector('input[type="checkbox"]#location');
 const customEventName = document.querySelector('input[type="text"]#event-name');
 
-let scheduleArray = [];
-let workDays = [];
+let icsContent = "";
 
-let month = "";
-let day = "";
-let hourStart = "";
-let hourEnd = "";
-
-let startTime = "";
-let endTime = "";
-let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0";
-
+// Main text-parsing function
 function parse() {
-    workDays = [];
 
-    pastedSchedule = textArea.value;
-    scheduleArray = pastedSchedule.toLowerCase().split("\n");
+    // Set empty variables
+    let workDays = [];
+    icsContent = "BEGIN:VCALENDAR\nVERSION:2.0";
+
+    // Format pasted text and convert to array
+    const scheduleArray = textArea.value.toLowerCase().split("\n");
 
     for(let i = 0; i < scheduleArray.length; i++) {
-        workDays.push(scheduleArray[i].slice(0,2));
-        let currentDay = String(workDays[i]);
 
-        month = String(scheduleArray[i].match(/-\d+/)[0]).slice(1,);
-        
+        // Add day to workDays array        
+        workDays.push(scheduleArray[i].slice(0,2));
+
+        // Define and format month
+        let month = String(scheduleArray[i].match(/-\d+/)[0]).slice(1,);
             if(month.length == 1) {
                 month = "0"+month;
             }
 
-        day = String(scheduleArray[i].match(/\d+/)[0]);
+        // Define day
+        let day = String(scheduleArray[i].match(/\d+/)[0]);
 
-        hourStart = String(scheduleArray[i].match(/\w\s(\d+):/)[1]);
-
+        // Define and format hourStart
+        let hourStart = String(scheduleArray[i].match(/\w\s(\d+):/)[1]);
             if(hourStart.length == 1) {
                 hourStart = "0"+hourStart;
             }
 
-        hourEnd = String(scheduleArray[i].match(/-\s(\d+):/)[1]);
+        // Define hourEnd
+        let hourEnd = String(scheduleArray[i].match(/-\s(\d+):/)[1]);
 
-        startTime = startTime.concat("2020", month, day, "T", hourStart, "0000" );
-        endTime = endTime.concat("2020", month, day, "T", hourEnd, "0000" );
+        // Format times for ICS
+        let startTime = "2020"+month+day+"T"+hourStart+"0000";
+        let endTime = "2020"+month+day+"T"+hourEnd+"0000";
 
+        // Add event to ICS
         icsContent = icsContent.concat("\nBEGIN:VEVENT\nDTSTART:"+startTime+"\nDTEND:"+endTime+"\nSUMMARY:Picnic\nEND:VEVENT");
 
-        startTime = "";
-        endTime = "";
-
+        // Make days highlight on page
         setTimeout(() => {
-            document.querySelector('#'+currentDay).classList.add('active');
+            document.querySelector('#'+String(workDays[i])).classList.add('active');
         }, 40*i);
+
     }
 
+    // End ICS
     icsContent = icsContent.concat('\nEND:VCALENDAR');
 
+    // Make download button active
     if(textArea.value!=='') {
         setTimeout(() => {
             calendarButton.classList.add('active');
@@ -76,6 +67,7 @@ function parse() {
     }
 }
 
+// Function: Download ICS
 function downloadICS(filename, text) {
 
     // create <a> element
@@ -92,26 +84,31 @@ function downloadICS(filename, text) {
     document.body.removeChild(element);
 }
 
+// Download button
 calendarButton.addEventListener('click', () => { 
 
-    //OPTIONS
+    // Option: Location
     if(locationCheckbox.checked == true) {
         icsContent = icsContent.replace(/\n(END:VEVENT)/g, "\nLOCATION:Picnic\\, Achtseweg Noord 30-36\\, 5651 GG Eindhoven\\, Netherlands\nEND:VEVENT");
     }
 
+    // Option: Custom event name
     if(customEventName.value !== "") {
         icsContent = icsContent.replace(/(SUMMARY:Picnic)/g, "SUMMARY:" + customEventName.value);
     }
 
+    // Download ICS
     downloadICS("picnic.ics",icsContent);
 });
 
+// Listen for changes in inputfield
 textArea.addEventListener('change', () => {
 
-    // Reset active states
+    // Remove active classes
     for(let i = 0; i < document.querySelectorAll('.calendar-day').length; i++) {
         document.querySelectorAll('.calendar-day')[i].classList.remove('active');
     }
 
+    // Call main function
     parse();
 });

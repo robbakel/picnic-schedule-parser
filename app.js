@@ -112,3 +112,25 @@ textArea.addEventListener('change', () => {
     // Call main function
     parse();
 });
+
+// Remember settings
+
+// Store option:Location Checkbox in localStorage
+locationCheckbox.addEventListener("change", () => {
+    localStorage.setItem('locationCheckbox', locationCheckbox.checked)
+});
+
+// Store option:Custom Event Name in localStorage
+customEventName.addEventListener("change", () => {
+    localStorage.setItem('customEventName', customEventName.value)
+});
+
+// Apply stored setting for Location Checkbox
+if(localStorage.getItem('locationCheckbox') == 'true') {
+    locationCheckbox.checked = true;
+}
+
+// Apply stored setting for Custom Event Name
+if(localStorage.getItem('customEventName')) {
+    customEventName.value = localStorage.getItem('customEventName');
+}

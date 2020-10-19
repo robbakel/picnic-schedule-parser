@@ -102,7 +102,7 @@ calendarButton.addEventListener('click', () => {
 });
 
 // Listen for changes in inputfield
-textArea.addEventListener('change', () => {
+textArea.addEventListener('keyup', () => {
 
     // Remove active classes
     for(let i = 0; i < document.querySelectorAll('.calendar-day').length; i++) {
